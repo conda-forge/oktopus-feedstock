@@ -7,29 +7,32 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
   noarch: python
-  number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv"
+  number: 1
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
     - autograd
-    - numpy >=1.10  # this comes from autograd
+    - numpy
     - pip
     - pytest-runner
-    - python
+    - python {{ python_min }}
     - scipy
+    - setuptools
   run:
     - autograd
     - {{ pin_compatible('numpy') }}
-    - python
+    - python >={{ python_min }}
     - scipy
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - oktopus
     - oktopus.likelihood
@@ -43,7 +46,7 @@ about:
   home: https://github.com/KeplerGO/oktopus
   license: MIT
   license_family: MIT
-  # license_file: LICENSE -- file not included in the current distribution
+  license_file: {{ environ["RECIPE_DIR"] }}/LICENSE
   summary: 'A soft-bodied, eight-armed package for beautiful inference.'
 
   description: |

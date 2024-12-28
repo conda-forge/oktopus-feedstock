@@ -7,12 +7,12 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
   noarch: python
-  number: 0
+  number: 1
   script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv"
 
 requirements:
@@ -21,15 +21,17 @@ requirements:
     - numpy >=1.10  # this comes from autograd
     - pip
     - pytest-runner
-    - python
+    - python {{ python_min }}
     - scipy
   run:
     - autograd
     - {{ pin_compatible('numpy') }}
-    - python
+    - python >={{ python_min }}
     - scipy
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - oktopus
     - oktopus.likelihood

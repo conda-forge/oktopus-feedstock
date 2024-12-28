@@ -13,16 +13,17 @@ source:
 build:
   noarch: python
   number: 1
-  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv"
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
     - autograd
-    - numpy >=1.10  # this comes from autograd
+    - numpy
     - pip
     - pytest-runner
     - python {{ python_min }}
     - scipy
+    - setuptools
   run:
     - autograd
     - {{ pin_compatible('numpy') }}
@@ -45,7 +46,7 @@ about:
   home: https://github.com/KeplerGO/oktopus
   license: MIT
   license_family: MIT
-  # license_file: LICENSE -- file not included in the current distribution
+  license_file: {{ environ["RECIPE_DIR"] }}/LICENSE
   summary: 'A soft-bodied, eight-armed package for beautiful inference.'
 
   description: |
